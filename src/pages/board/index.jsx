@@ -21,7 +21,17 @@ const Board = inject("MessagesStore")(
       (message) => message.working === working
     );
 
-    // const
+    const cancelEditingButton = editingModeIsTurnedOn ? (
+      <input
+        type="button"
+        value="Отменить редактирование"
+        className="board-form_button"
+        onClick={() => {
+          toggleEditingMode(false);
+          setMessageToSend();
+        }}
+      />
+    ) : null;
 
     return (
       <>
@@ -42,8 +52,9 @@ const Board = inject("MessagesStore")(
           <input
             type="submit"
             value="Отправить"
-            className="board-form_submit"
+            className="board-form_button"
           />
+          {cancelEditingButton}
         </form>
       </>
     );
