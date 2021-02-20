@@ -4,6 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
+totsystems_tz.pdf
 
 # testing
 /coverage

@@ -1,0 +1,31 @@
+$GRAY_COL: #bebebe;
+
+.message_wrapper {
+  box-shadow: 0 0 5px 0 $GRAY_COL;
+  padding: 5px 10px;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  .message_author {
+    position: relative;
+    font-size: 10px;
+    font-weight: bold;
+    color: $GRAY_COL;
+
+    &:after {
+      display: block;
+      content: "";
+      bottom: 0;
+      height: 2px;
+      background: linear-gradient(to right, $GRAY_COL, #fff);
+    }
+  }
+
+  .message_text {
+    margin-top: 5px;
+    font-size: 14px;
+  }
+}
