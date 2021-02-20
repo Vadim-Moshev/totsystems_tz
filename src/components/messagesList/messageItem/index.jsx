@@ -7,13 +7,23 @@ import "./index.scss";
 
 const MessageItem = inject("MessagesStore")(
   observer(({ id, userName, userId, text, MessagesStore }) => {
-    const { loggedUserId, deleteMessageById } = MessagesStore;
+    const {
+      loggedUserId,
+      deleteMessageById,
+      messageToSend,
+      setMessageToSendById,
+      toggleEditingMode,
+    } = MessagesStore;
 
     const messageControlPanel =
       userId === loggedUserId ? (
         <MessageControlPanel
-          onMessageDelete={(messageId) => {
+          onMessageDelete={() => {
             deleteMessageById(id);
+          }}
+          onMessageUpdateQuery={() => {
+            toggleEditingMode(true, id);
+            setMessageToSendById(id);
           }}
         />
       ) : null;

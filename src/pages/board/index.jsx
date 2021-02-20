@@ -11,11 +11,17 @@ const Board = inject("MessagesStore")(
       messages,
       messageToSend,
       setMessageToSend,
-      addMessageToBoard,
+      saveMessage,
+      messageIsBeingEditedIndex,
+      toggleEditingMode,
+      editingModeIsTurnedOn,
     } = MessagesStore;
+
     const messagesData = messages.filter(
       (message) => message.working === working
     );
+
+    // const
 
     return (
       <>
@@ -25,7 +31,7 @@ const Board = inject("MessagesStore")(
           className="board-form"
           onSubmit={(event) => {
             event.preventDefault();
-            addMessageToBoard(working);
+            saveMessage(working, messageIsBeingEditedIndex);
           }}
         >
           <textarea
@@ -35,7 +41,6 @@ const Board = inject("MessagesStore")(
           />
           <input
             type="submit"
-            className="board-form_submit"
             value="Отправить"
             className="board-form_submit"
           />

@@ -51,32 +51,53 @@ class MessagesStore {
   ];
 
   messageToSend = "";
+  editingModeIsTurnedOn = false;
+  messageIsBeingEditedIndex = -1;
 
   constructor() {
     makeObservable(this, {
       messages: observable,
       messageToSend: observable,
+      editingModeIsTurnedOn: observable,
+      messageIsBeingEditedIndex: observable,
 
       setMessageToSend: action,
-      addMessageToBoard: action,
+      saveMessage: action,
       deleteMessageById: action,
+      setMessageToSendById: action,
+      toggleEditingMode: action,
     });
   }
+
+  toggleEditingMode = (flag, messageIsBeingEditedIndex = -1) => {
+    this.editingModeIsTurnedOn = flag;
+    this.messageIsBeingEditedIndex = messageIsBeingEditedIndex;
+  };
 
   setMessageToSend = (text = "") => {
     this.messageToSend = text;
   };
 
-  addMessageToBoard = (working) => {
-    const newMessage = {
-      id: new Date().getTime(),
-      userId: this.loggedUserId,
-      text: this.messageToSend,
-      userName: "Пользователь (ЭТО ВЫ)",
-      working,
-    };
+  saveMessage = (working, messageId = -1) => {
+    if (messageId !== -1) {
+      const messageIndexToSave = this.messages.findIndex(
+        (message) => message.id === messageId
+      );
+      this.messages[messageIndexToSave].text = this.messageToSend;
 
-    this.messages.push(newMessage);
+      this.toggleEditingMode(false);
+    } else {
+      const newMessage = {
+        id: new Date().getTime(),
+        userId: this.loggedUserId,
+        text: this.messageToSend,
+        userName: "Пользователь (ЭТО ВЫ)",
+        working,
+      };
+
+      this.messages.push(newMessage);
+    }
+
     this.setMessageToSend();
   };
 
@@ -84,7 +105,16 @@ class MessagesStore {
     const messageIndexToDelete = this.messages.findIndex(
       (message) => message.id === messageId
     );
+
     this.messages.splice(messageIndexToDelete, 1);
+  };
+
+  setMessageToSendById = (messageId) => {
+    const index = this.messages.findIndex(
+      (message) => message.id === messageId
+    );
+
+    this.messageToSend = this.messages[index].text;
   };
 }
 
