@@ -6,7 +6,7 @@ import MessageControlPanel from "./messageControlPanel";
 import "./index.scss";
 
 const MessageItem = inject("MessagesStore")(
-  observer(({ id, userName, userId, text, MessagesStore }) => {
+  observer(({ id, userName, userId, text, working, MessagesStore }) => {
     const {
       loggedUserId,
       deleteMessageById,
@@ -19,7 +19,7 @@ const MessageItem = inject("MessagesStore")(
       userId === loggedUserId ? (
         <MessageControlPanel
           onMessageDelete={() => {
-            deleteMessageById(id);
+            deleteMessageById(id, working);
           }}
           onMessageUpdateQuery={() => {
             toggleEditingMode(true, id);

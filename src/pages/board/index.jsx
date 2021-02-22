@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { inject, observer } from "mobx-react";
 
 import MessagesList from "../../components/messagesList";
@@ -7,9 +7,11 @@ import "./index.scss";
 
 const Board = inject("MessagesStore")(
   observer(({ MessagesStore, working }) => {
+    const textarea = useRef();
     const {
-      messages,
+      getMessagesByWorkingFlag,
       messageToSend,
+      messages,
       setMessageToSend,
       saveMessage,
       messageIsBeingEditedIndex,
@@ -17,9 +19,18 @@ const Board = inject("MessagesStore")(
       editingModeIsTurnedOn,
     } = MessagesStore;
 
-    const messagesData = messages.filter(
-      (message) => message.working === working
-    );
+    useEffect(() => {
+      getMessagesByWorkingFlag(working);
+      toggleEditingMode(false);
+    }, [working]);
+
+    useEffect(() => {
+      if (editingModeIsTurnedOn) {
+        textarea.current.focus();
+      }
+    }, [editingModeIsTurnedOn]);
+
+    const messagesData = messages;
 
     const cancelEditingButton = editingModeIsTurnedOn ? (
       <input
@@ -35,7 +46,7 @@ const Board = inject("MessagesStore")(
 
     return (
       <>
-        <MessagesList messagesData={messagesData} />
+        <MessagesList messagesData={messagesData} working={working} />
         <form
           noValidate
           className="board-form"
@@ -48,6 +59,7 @@ const Board = inject("MessagesStore")(
             className="board-form_textarea"
             onInput={(event) => setMessageToSend(event.target.value)}
             value={messageToSend}
+            ref={textarea}
           />
           <input
             type="submit"
